@@ -1,0 +1,66 @@
+server:
+  port: 8088
+
+---
+
+spring:
+  profiles: default
+  cloud:
+    gateway:
+      routes:
+        - id: bookreservation
+          uri: http://localhost:8081
+          predicates:
+            - Path=/reservations/** /booklists/**
+        - id: stockmanagement
+          uri: http://localhost:8082
+          predicates:
+            - Path=/stocks/** 
+        - id: customermanagement
+          uri: http://localhost:8083
+          predicates:
+            - Path=/customers/** 
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+
+---
+
+spring:
+  profiles: docker
+  cloud:
+    gateway:
+      routes:
+        - id: bookreservation
+          uri: http://bookreservation:8080
+          predicates:
+            - Path=/reservations/** /booklists/**
+        - id: stockmanagement
+          uri: http://stockmanagement:8080
+          predicates:
+            - Path=/stocks/** 
+        - id: customermanagement
+          uri: http://customermanagement:8080
+          predicates:
+            - Path=/customers/** 
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+server:
+  port: 8080
